@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, target-densityDpi=device-dpi" />
+		<meta name="theme-color" content="#db5945">
+		
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="stylesheets/index.min.css">
+		<link rel="stylesheet" type="text/css" href="plugins/jquery.contextmenu/jquery.contextMenu.min.css">
+		<link rel="manifest" href="manifest.json">
+
+		
+		<script src="javascript/spin.min.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.7.1/firebase.js"></script>
+		<script>
+		// Initialize Firebase
+			var config = {
+				apiKey: "AIzaSyDIlUCa3-uADofW6_MwInSq2IO0LsxtI3s",
+				authDomain: "easymatch-hw5.firebaseapp.com",
+				databaseURL: "https://easymatch-hw5.firebaseio.com",
+				storageBucket: "easymatch-hw5.appspot.com",
+				messagingSenderId: "16899894668"
+			};
+			firebase.initializeApp(config);
+		</script>
+		
+		<title>EasyMatch</title>
+	</head>
+	<body style="background-image: url(images/background.jpg); background-repeat: no-repeat; background-size: cover;">
+		<header id="account-header" class="header-navbar">
+		   <div id="login-logout-interface" class="container">
+			  <a class="logo" href="/"><img src="images/logo.png" alt="logo" width="200"/></a>
+			  <nav class="nav font-gotham-medium">
+				 <ul class="user-links list-inline pull-right">
+					<li><a id="messages" class="header-link-signup text-uppercase nav-link">Messages</a></li>
+						<li><a id="profile" class="header-link-signup text-uppercase nav-link">Profile</a></li>
+						<li><a id="logout" class="text-uppercase nav-link">Logout</a></li>
+				 </ul>
+			  </nav>
+		   </div>
+		</header>
+		
+		<header id="search-header" class="header-navbar" style="background-color: #e81212;">
+			<div class="container">
+				<nav id="search_nav" class="nav" style="font-size: 14px;">
+					<ul class="user-links list-inline">
+						<li>
+							<select id="search_gender">
+								<option value="" disabled="" selected="">I am...</option>
+								<option value="male">Male</option>
+								<option value="female">Female</option>
+							</select>
+						</li>
+						<li>
+							<select id="search_seeking">
+								<option value="" disabled="" selected="">Seeking...</option>
+								<option value="male">Male</option>
+								<option value="female">Female</option>
+							</select>
+						</li>
+						<li>
+							<select id="search_university">
+								<option value="" disabled="" selected="">At University...</option>
+								<option value="University of California Berkeley">University of California Berkeley</option>
+								<option value="University of California Davis">University of California Davis</option>
+								<option value="University of California Irvine">University of California Irvine</option>
+								<option value="University of California Los Angeles">University of California Los Angeles</option>
+								<option value="University of California Merced">University of California Merced</option>
+								<option value="University of California Riverside">University of California Riverside</option>
+								<option value="University of California San Diego">University of California San Diego</option>
+								<option value="University of California San Francisco">University of California San Francisco</option>
+								<option value="University of California Santa Barbara">University of California Santa Barbara</option>
+								<option value="University of California Santa Cruz">University of California Santa Cruz</option>
+							</select>
+						</li>
+						<li>
+							<select id="search_sort">
+								<option value="sort_last">Sort By Last Visit</option>
+								<option value="sort_newest">Sort By Newest User</option>
+							</select>
+						</li>
+						<li><a id="search" class="btn btn-default header-cta-feh">Search</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+		
+		<div>
+			<div>
+				<div id="modal-popup-container" class="modal-popup">
+					<div id="modal-popup-container-inner" class="modal-content">
+					
+					</div>
+				</div>
+			</div>
+				
+			<div id="chat-container" style="display: none;">
+				<div id="chat-container-inner" class="container-fill" style="background-color: #e5e5e5; overflow: auto;">
+					<div class="row chat-window col-xs-5 col-md-3" id="chat_window_1">
+						<div class="col-xs-12 col-md-12">
+							<div class="panel panel-default">
+								<div id="chat_messages" class="panel-body msg_container_base">
+								
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="message-input-container" class="container-fill">
+					<div class="row">
+						<div class="panel-footer">
+							<div class="input-group">
+								<span class="input-group-btn">
+									<button id="close_chat" class="btn btn-primary btn-sm">Close</button>
+								</span>
+								<input id="chat_input" type="text" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+								<span class="input-group-btn">
+									<button id="send_chat" class="btn btn-primary btn-sm">Send</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="profile_images_container">
+				<div id="profile_images_container-inner" class="container-fill">
+				
+				</div>
+			</div>
+		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="plugins/jquery.contextmenu/jquery.contextMenu.js"></script>
+		<script src="javascript/blob-util.min.js"></script>
+		<script src="javascript/logic.min.js"></script>
+	</body>
+	
+	<script>
+		if ('serviceWorker' in navigator)
+		{
+			console.log("Will the service worker register?");
+			
+			navigator.serviceWorker.register('service-worker.js').then(function(reg)
+			{
+				console.log("Yes, it did.");
+			}).catch(function(err)
+			{
+				console.log("No it didn't. This happened: ", err)
+			});
+		}
+	</script>
+</html>
